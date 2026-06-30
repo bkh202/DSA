@@ -33,6 +33,7 @@ public class ResverseLL {
         return head;
 
     }
+    // Optimal Approach
 
     public static Node reverseNode(Node head){
         Node temp=head;

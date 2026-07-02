@@ -1,4 +1,4 @@
-package LINKED_LIST;
+package LINKED_LIST.Middle;
 
 class Node{
     int val;

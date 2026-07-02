@@ -1,4 +1,4 @@
-package LINKED_LIST;
+package LINKED_LIST.Reverse;
 
 import java.util.Stack;
 
@@ -33,8 +33,7 @@ public class ResverseLL {
         return head;
 
     }
-    // Optimal Approach
-
+  // optimal
     public static Node reverseNode(Node head){
         Node temp=head;
         Node prev= null;

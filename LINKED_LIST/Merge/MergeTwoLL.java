@@ -1,8 +1,10 @@
-package LINKED_LIST;
+package LINKED_LIST.Merge;
 
 import java.util.ArrayList;
 
 import java.util.Collections;
+
+
 
 class Node {
     int val;
@@ -45,7 +47,7 @@ public class MergeTwoLL {
         Node head = Converting(list);
         return head;
     }
-
+  // optimal
     public static Node Merge(Node l1, Node l2) {
         Node dummpyNode = new Node(-1);
         Node temp = dummpyNode;

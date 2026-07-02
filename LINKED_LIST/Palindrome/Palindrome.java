@@ -25,14 +25,20 @@ public class Palindrome {
         temp=head;
 
         while (temp != null) {
+
             if(temp. val != s.pop()){
+
+            if(temp. val != s.peek()){
+
                 return false;
             }else{
                 temp=temp.next;
             }
         }
-        return true;
+       
     }
+     return true;
+}
 
     // optimal using slow and fast and revese method
 

@@ -1,4 +1,4 @@
-package LINKED_LIST;
+package LINKED_LIST.Delete;
 
 class Node {
     int val;

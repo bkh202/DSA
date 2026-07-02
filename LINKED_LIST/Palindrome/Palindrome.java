@@ -25,7 +25,7 @@ public class Palindrome {
         temp=head;
 
         while (temp != null) {
-            if(temp. val != s.peek()){
+            if(temp. val != s.pop()){
                 return false;
             }else{
                 temp=temp.next;

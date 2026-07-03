@@ -9,6 +9,7 @@ class Node {
         this.next = null;
     }
 }
+// TC O(1)
 public class DeleteNode {
       public static void Delete(Node head){
             if(head == null) return ;

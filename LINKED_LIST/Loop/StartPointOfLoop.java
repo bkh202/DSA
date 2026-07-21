@@ -1,4 +1,4 @@
-package LINKED_LIST.LoopDection;
+package LINKED_LIST.Loop;
 
 import java.util.HashMap;
 

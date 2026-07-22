@@ -48,6 +48,41 @@ public class FlatOfLL {
 
         return convertArrTOLL(arr);
    }
+   	public static Node merge(Node list1, Node list2) {
+		
+		Node dummy = new Node(0);
+		Node temp = dummy;
+		
+		while (list1 != null && list2 != null) {
+			
+			if (list1.val < list2.val) {
+				temp.child = list1;
+				list1 = list1.child;
+			} else {
+				temp.child = list2;
+				list2 = list2.child;
+			}
+			
+			temp = temp.child;
+		}
+		
+		if (list1 != null)
+			temp.child = list1;
+		else
+			temp.child = list2;
+		
+		return dummy.child;
+	}
+	
+	public static Node flatten(Node root) {
+		if (root == null || root.next == null)
+			return root;
+		
+		root.next = flatten(root.next);
+		root = merge(root, root.next);
+		return root;
+		
+	}
     public static void main(String[] args) {
         
     }

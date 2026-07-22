@@ -1,4 +1,4 @@
-# Clone a Linked List with Random Pointer (Optimal Approach)
+# Clone a Linked List with Random Pointer
 
 ## Problem Statement
 
@@ -6,28 +6,166 @@ Given a linked list where each node contains:
 
 - `data`
 - `next` pointer
-- `random` pointer (can point to any node in the list or `null`)
+- `random` pointer
 
 Create a **deep copy** of the linked list such that:
 
-- Every node is newly created.
-- The `next` pointers are preserved.
-- The `random` pointers point to the corresponding cloned nodes.
+- Every node in the cloned list is newly created.
+- Both `next` and `random` pointers are preserved.
+- The cloned list is completely independent of the original list.
 - The original linked list remains unchanged.
 
 ---
 
-# Approach
+# Approaches
 
-The optimal solution avoids using extra data structures like a `HashMap` by modifying the original linked list temporarily.
+There are two popular approaches to solve this problem:
 
-The algorithm consists of **three steps**.
+1. **HashMap Based Approach**
+2. **Optimal Interleaving Approach**
+
+---
+
+# Approach 1: HashMap Based
+
+## Idea
+
+Create a mapping between every original node and its cloned node using a `HashMap`.
+
+The solution is performed in two passes:
+
+- First pass creates cloned nodes.
+- Second pass connects the `next` and `random` pointers using the stored mapping.
+
+---
+
+## Steps
+
+### Step 1
+
+Traverse the original linked list and create a clone of every node.
+
+Store the mapping:
+
+```
+Original Node  →  Cloned Node
+```
+
+Example
+
+```
+1 → 2 → 3
+
+HashMap
+
+1 → 1'
+2 → 2'
+3 → 3'
+```
+
+---
+
+### Step 2
+
+Traverse the list again.
+
+For every original node:
+
+- Connect the cloned node's `next` pointer.
+- Connect the cloned node's `random` pointer.
+
+Since every cloned node already exists in the HashMap, pointer assignment becomes straightforward.
+
+---
+
+## Dry Run
+
+Original List
+
+```
+7 → 14 → 21 → 28
+```
+
+Random Connections
+
+```
+7  → 21
+14 → 7
+21 → 28
+28 → 14
+```
+
+After First Traversal
+
+```
+HashMap
+
+7  → 7'
+14 → 14'
+21 → 21'
+28 → 28'
+```
+
+After Second Traversal
+
+```
+7' → 14' → 21' → 28'
+
+Random
+
+7'  → 21'
+14' → 7'
+21' → 28'
+28' → 14'
+```
+
+---
+
+## Time Complexity
+
+```
+O(N)
+```
+
+---
+
+## Space Complexity
+
+```
+O(N)
+```
+
+---
+
+## Advantages
+
+- Easy to understand.
+- Easy to implement.
+- Less pointer manipulation.
+- Good for beginners.
+
+---
+
+## Disadvantages
+
+- Requires extra memory.
+- Not the most optimized solution.
+
+---
+
+# Approach 2: Optimal (Interleaving Method)
+
+## Idea
+
+Instead of using a `HashMap`, temporarily insert the cloned node immediately after every original node.
+
+The algorithm consists of three traversals.
 
 ---
 
 ## Step 1: Insert Copy Nodes
 
-Create a copy of every original node and insert it immediately after the original node.
+Insert every cloned node immediately after its original node.
 
 ### Before
 
@@ -41,17 +179,15 @@ Create a copy of every original node and insert it immediately after the origina
 1 → 1' → 2 → 2' → 3 → 3'
 ```
 
-This arrangement makes it easy to locate the cloned version of any original node.
+Now every copied node is located directly after its original node.
 
 ---
 
 ## Step 2: Connect Random Pointers
 
-Each copied node's random pointer is assigned using the original node's random pointer.
+Since every copied node follows its original node, the copied random node can be accessed directly.
 
-Since every copied node is placed immediately after its original node, the copied random node can be accessed directly.
-
-### Example
+Example
 
 Original
 
@@ -65,7 +201,7 @@ After inserting copies
 1 → 1' → 2 → 2' → 3 → 3'
 ```
 
-The copied node's random becomes
+Copied random becomes
 
 ```
 1'.random → 3'
@@ -73,11 +209,9 @@ The copied node's random becomes
 
 ---
 
-## Step 3: Separate the Two Lists
+## Step 3: Separate Both Lists
 
-After assigning all random pointers, the original and copied nodes are interleaved.
-
-The final step restores the original linked list and extracts the cloned linked list.
+Restore the original linked list while extracting the copied linked list.
 
 ### Before Separation
 
@@ -101,15 +235,15 @@ Copied List
 
 ---
 
-# Dry Run
+## Dry Run
 
-Original List
+Original
 
 ```
 7 → 14 → 21 → 28
 ```
 
-Random Connections
+Random
 
 ```
 7  → 21
@@ -149,15 +283,7 @@ Copied
 
 ---
 
-# Time Complexity
-
-| Operation | Complexity |
-|-----------|------------|
-| Insert copied nodes | O(N) |
-| Assign random pointers | O(N) |
-| Separate both lists | O(N) |
-
-### Overall Time Complexity
+## Time Complexity
 
 ```
 O(N)
@@ -165,23 +291,27 @@ O(N)
 
 ---
 
-# Space Complexity
+## Space Complexity
 
 ```
 O(1)
 ```
 
-No extra data structures are used. The copied nodes themselves are not counted as extra space because they form the required output.
+---
+
+## Advantages
+
+- No extra data structures required.
+- Constant auxiliary space.
+- Best solution for interviews.
+- Highly efficient.
 
 ---
 
-# Why This Approach is Optimal
+## Disadvantages
 
-- No `HashMap` is required.
-- Only three traversals of the linked list.
-- Constant auxiliary space.
-- Efficient for large linked lists.
-- Commonly asked in coding interviews.
+- Pointer manipulation is slightly complex.
+- Easy to make mistakes while separating the two lists.
 
 ---
 
@@ -191,38 +321,50 @@ No extra data structures are used. The copied nodes themselves are not counted a
 - Single-node linked list.
 - Random pointer is `null`.
 - Random pointer points to itself.
-- Multiple nodes point to the same random node.
+- Multiple nodes share the same random pointer.
 - Random pointers form cycles.
-- Large values of `N`.
+- Large linked lists.
 
 ---
 
 # Common Mistakes
 
-- Forgetting to insert copied nodes immediately after the originals.
-- Incorrectly assigning random pointers.
-- Not restoring the original linked list after cloning.
-- Breaking the copied list while separating.
 - Forgetting to handle `null` random pointers.
-- Losing track of the original head during traversal.
+- Assigning the copied node's random pointer incorrectly.
+- Losing the original linked list while separating.
+- Breaking the copied list during extraction.
+- Forgetting to restore the original linked list.
+- Using node values instead of node references as HashMap keys.
 
 ---
 
-# Complexity Summary
+# Complexity Comparison
 
 | Approach | Time | Space |
 |----------|------|-------|
-| HashMap-Based | O(N) | O(N) |
-| Optimal Interleaving Method | O(N) | O(1) |
+| HashMap Based | O(N) | O(N) |
+| Optimal Interleaving | O(N) | O(1) |
+
+---
+
+# Which Approach Should You Choose?
+
+| Scenario | Recommended Approach |
+|----------|----------------------|
+| Easy implementation | HashMap |
+| Interview coding rounds | Optimal |
+| Memory optimization | Optimal |
+| Beginner-friendly | HashMap |
+| Production with limited memory | Optimal |
 
 ---
 
 # Key Takeaways
 
-- The algorithm temporarily interleaves copied nodes with the original nodes.
-- Random pointers can be assigned without any extra mapping.
-- The final step separates the two lists while restoring the original linked list.
-- The optimal solution achieves **O(N)** time complexity with **O(1)** auxiliary space, making it the preferred approach for interviews and production implementations.
+- Both approaches clone the linked list in **O(N)** time.
+- The **HashMap approach** is simpler and easier to debug but requires **O(N)** extra space.
+- The **Optimal Interleaving approach** eliminates the need for extra memory by temporarily modifying the original linked list.
+- The optimal approach restores the original list after cloning and achieves **O(1)** auxiliary space, making it the preferred solution in coding interviews.
 
 # Author
  **Md Bakhtiyar**

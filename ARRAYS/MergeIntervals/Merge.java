@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 public class Merge {
     public static int[][] mergeIntervals(int intervals[][]) {
-        Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+        if (intervals == null || intervals.length == 0) return new int[0][0];
+        Arrays.sort(intervals,(a,b)->Integer.compare(a[0],b[0]));
         int n = intervals.length;
         int idx = 0;
         int tem[][] = new int[n][2];
@@ -26,6 +27,7 @@ public class Merge {
 
         }
         return res;
+        //return Arrays.copyOfRange(tem,0,idx+1);
     }
 
     public static void main(String[] args) {

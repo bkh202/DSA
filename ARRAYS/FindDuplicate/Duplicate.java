@@ -19,7 +19,7 @@ public class Duplicate {
         }
         return false;
     }
-
+   // optimal
     public static boolean findDuplicateBetter(int arr[]) {
 
         if (arr == null || arr.length <= 1)

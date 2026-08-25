@@ -36,7 +36,7 @@ public class Merge {
     // opimal for sorted array
 
     public static void mergeArraysOptimal(int arr1[], int arr2[]) {
-        if (arr1 == null || arr2 == null || arr1.length == 0 || arr2.length == 1)
+        if (arr1 == null || arr2 == null || arr1.length == 0 || arr2.length == 0)
             return;
         int left = arr1.length - 1;
         int right = 0;
@@ -59,8 +59,8 @@ public class Merge {
     public static void mergeArrays3(int a[], int b[], int n, int m) {
         if (a == null || b == null)
             return;
-        int i = m - 1;
-        int j = n - 1;
+        int i = n - 1;
+        int j = m - 1;
         int k = m + n - 1;
 
         while (i >= 0 && j >= 0) {

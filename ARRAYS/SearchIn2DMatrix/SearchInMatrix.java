@@ -2,13 +2,13 @@ package ARRAYS.SearchIn2DMatrix;
 
 public class SearchInMatrix {
 
-    // better Apparach
+    // Better Approach: Binary search on specific valid rows
     public static boolean binarySearch(int arr[], int target) {
-        int n = arr.length;
+        if (arr == null || arr.length == 0) return false;
         int left = 0;
-        int right = n - 1;
+        int right = arr.length - 1;
         while (left <= right) {
-            int mid = (left + right) / 2;
+            int mid = left + (right - left) / 2; // Prevents overflow
             if (arr[mid] == target) {
                 return true;
             } else if (arr[mid] < target) {
@@ -21,9 +21,11 @@ public class SearchInMatrix {
     }
 
     public static boolean Search(int arr[][], int target) {
+        if (arr == null || arr.length == 0 || arr[0].length == 0) return false;
         int m = arr[0].length;
         int n = arr.length;
         for (int i = 0; i < n; i++) {
+            // Check if target falls within the current row's range
             if (arr[i][0] <= target && arr[i][m - 1] >= target) {
                 return binarySearch(arr[i], target);
             }
@@ -31,19 +33,20 @@ public class SearchInMatrix {
         return false;
     }
 
-    // Optimal using Flat 2D in 1D array
+    // Optimal 1: Treat strictly sorted 2D matrix as a flat 1D array
     public static boolean searchInMatrix(int mat[][], int target) {
-        if (mat == null)
-            return false;
+        if (mat == null || mat.length == 0 || mat[0].length == 0) return false;
+        
         int n = mat.length;
         int m = mat[0].length;
         int low = 0;
         int high = (n * m) - 1;
 
         while (low <= high) {
-            int mid = (low + high) / 2;
+            int mid = low + (high - low) / 2; // Prevents overflow
             int row = mid / m;
             int col = mid % m;
+            
             if (mat[row][col] == target)
                 return true;
             else if (mat[row][col] < target)
@@ -54,21 +57,21 @@ public class SearchInMatrix {
         return false;
     }
 
-    // using Stair Case Optimal
-
+    // Optimal 2: StairCase for row-wise and column-wise sorted matrices
     public static boolean StairCase(int mat[][], int target) {
-        if (mat == null)
-            return false;
+        if (mat == null || mat.length == 0 || mat[0].length == 0) return false;
+        
         int row = 0;
-        int col = mat[0].length;
+        int col = mat[0].length - 1; // Corrected: Start at the last valid index
+        
+        // Corrected: Run as long as indices remain within matrix bounds
         while (row < mat.length && col >= 0) {
-            if (target == mat[row][col] )
+            if (mat[row][col] == target)
                 return true;
             else if (mat[row][col] > target)
-                col--;
+                col--; // Target is smaller, eliminate current column
             else
-                row++;
-
+                row++; // Target is larger, eliminate current row
         }
         return false;
     }
@@ -79,6 +82,7 @@ public class SearchInMatrix {
                 { 6, 7, 8, 9 },
                 { 10, 11, 12, 13 }
         };
+        // This will now correctly print 'true'
         System.out.println(StairCase(mat, 12));
     }
 }

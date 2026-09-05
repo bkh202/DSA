@@ -19,7 +19,8 @@ public class ReversePair {
     }
     // optimal 
     public static int countReversePairs(int arr[]) {
-         return mergeShort(arr, 0, arr.length-1);
+          if(arr==null || arr.length ==0) return 0;
+         return mergeSort(arr, 0, arr.length-1);
     }
 
     public static int countReversePairHelper(int arr[], int low, int mid, int high) {
@@ -34,14 +35,14 @@ public class ReversePair {
         return count;
     }
 
-    public static int mergeShort(int arr[], int low, int high) {
+    public static int mergeSort(int arr[], int low, int high) {
         int count = 0;
         if (low >= high)
             return count;
 
-        int mid = (low + high) / 2;
-        count += mergeShort(arr, low, mid);
-        count += mergeShort(arr, mid + 1, high);
+        int mid = low+(high - low) / 2;
+        count += mergeSort(arr, low, mid);
+        count += mergeSort(arr, mid + 1, high);
         count += countReversePairHelper(arr, low, mid, high);
         merge(arr, low, mid, high);
         return count;

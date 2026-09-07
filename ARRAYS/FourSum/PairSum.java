@@ -1,62 +1,60 @@
 package ARRAYS.FourSum;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PairSum {
-    public static List<List<Integer>> pairSumBrute(int arr[], int target) {
-        if (arr == null || arr.length < 4)
+
+    // 1. Brute Force
+    public static List<List<Integer>> pairSumBrute(int[] arr, int target) {
+        if (arr == null || arr.length < 4) {
             return new ArrayList<>();
+        }
+
         int n = arr.length;
         Set<List<Integer>> set = new HashSet<>();
+
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
-                Set<Long> st = new HashSet<>();
                 for (int k = j + 1; k < n; k++) {
                     for (int l = k + 1; l < n; l++) {
-                        List<Integer> ans = new ArrayList<>();
-                        int sum = arr[i];
-                        sum += arr[j];
-                        sum += arr[k];
-                        sum += arr[l];
+                        // Cast to long to prevent integer overflow on massive inputs
+                        long sum = (long) arr[i] + arr[j] + arr[k] + arr[l];
+
                         if (sum == target) {
-                            ans.add(arr[i]);
-                            ans.add(arr[j]);
-                            ans.add(arr[k]);
-                            ans.add(arr[l]);
+                            List<Integer> ans = Arrays.asList(arr[i], arr[j], arr[k], arr[l]);
                             ans.sort(Integer::compareTo);
                             set.add(ans);
                         }
-                        st.add((long) arr[l]);
                     }
-
                 }
             }
         }
-
-        List<List<Integer>> res = new ArrayList<>(set);
-        return res;
+        return new ArrayList<>(set);
     }
 
-    public static List<List<Integer>> pairSumBetter(int arr[], int target) {
-        if (arr == null || arr.length < 4)
+    // 2. Better (Hashing)
+    public static List<List<Integer>> pairSumBetter(int[] arr, int target) {
+        if (arr == null || arr.length < 4) {
             return new ArrayList<>();
+        }
+
         int n = arr.length;
         Set<List<Integer>> set = new HashSet<>();
 
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
-                Set<Long> st = new HashSet<>();
+                Set<Long> st = new HashSet<>(); // Tracks elements seen in the 'k' loop
+
                 for (int k = j + 1; k < n; k++) {
-                    int sum = arr[i];
-                    sum += arr[j];
-                    sum += arr[k];
-                    int needmore = target - sum;
-                    if (st.contains((long) needmore)) {
-                        List<Integer> ans = new ArrayList<>();
-                        ans.add(arr[i]);
-                        ans.add(arr[j]);
-                        ans.add(arr[k]);
-                        ans.add((int) needmore);
+                    long sum = (long) arr[i] + arr[j] + arr[k];
+                    long needMore = (long) target - sum;
+
+                    if (st.contains(needMore)) {
+                        List<Integer> ans = Arrays.asList(arr[i], arr[j], arr[k], (int) needMore);
                         ans.sort(Integer::compareTo);
                         set.add(ans);
                     }
@@ -64,20 +62,68 @@ public class PairSum {
                 }
             }
         }
-        List<List<Integer>> res = new ArrayList<>(set);
+        return new ArrayList<>(set);
+    }
+
+    // 3. Optimal (Two-Pointer)
+    public static List<List<Integer>> pairSumOptimal(int[] arr, int target) {
+        if (arr == null || arr.length < 4) {
+            return new ArrayList<>();
+        }
+        
+        
+        Arrays.sort(arr);
+        
+        int n = arr.length;
+        List<List<Integer>> res = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            // Skip duplicates for 'i'
+            if (i > 0 && arr[i] == arr[i - 1]) {
+                continue;
+            }
+
+            for (int j = i + 1; j < n; j++) {
+                // Skip duplicates for 'j'. Ensure j is strictly greater than i + 1
+                if (j > i + 1 && arr[j] == arr[j - 1]) {
+                    continue;
+                }
+
+                int k = j + 1;
+                int l = n - 1;
+
+                while (k < l) {
+                    long sum = (long) arr[i] + arr[j] + arr[k] + arr[l];
+                    
+                    if (sum == target) {
+                        res.add(Arrays.asList(arr[i], arr[j], arr[k], arr[l]));
+                        k++;
+                        l--;
+                        
+                        // Skip duplicates for 'k' and 'l'
+                        while (k < l && arr[k] == arr[k - 1]) k++;
+                        while (k < l && arr[l] == arr[l + 1]) l--;
+                        
+                    } else if (sum < target) {
+                        k++;
+                    } else {
+                        l--;
+                    }
+                }
+            }
+        }
         return res;
     }
 
     public static void main(String[] args) {
-        int arr[] = { 10, 2, 3, 4, 5, 7, 8 };
+        int[] arr = { 10, 2, 3, 4, 5, 7, 8 };
         int tar = 23;
-        List<List<Integer>> ans =pairSumBrute(arr, tar);
+
+        System.out.println("Testing Optimal Approach:");
+        List<List<Integer>> ans = pairSumOptimal(arr, tar);
 
         for (List<Integer> res : ans) {
-            for (int ele : res) {
-                System.out.print(ele + " ");
-            }
-            System.out.println();
+            System.out.println(res);
         }
     }
 }
